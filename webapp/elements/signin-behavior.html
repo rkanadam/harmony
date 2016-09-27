@@ -1,0 +1,58 @@
+<script>
+    SigninBehavior = {
+
+        properties: {
+            isHighlighted: {
+                type: Boolean,
+                value: false,
+                notify: true,
+                observer: '_highlightChanged'
+            }
+        },
+
+        listeners: {
+            click: '_toggleHighlight'
+        },
+
+        created: function () {
+            /*
+             <google-signin client-id="477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com"
+             scopes="https://www.googleapis.com/auth/drive"
+             is-authorized="{{authorized}}" is-signed-in="{{signedIn}}"
+             on-google-signin-success="_onLoginSuccess" with-backdrop always-on-top></google-signin>
+
+             */
+            this._apiLoader = document.createElement('google-js-api');
+            this._apiLoader.addEventListener('js-api-load', function () {
+                window.gapi.load('auth2', this._onApiLoad.bind(this));
+            }.bind(this));
+        },
+
+        _onApiLoad: function () {
+            var e = document.createElement("google-signin-aware");
+            e.clientId = "477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com";
+            e.scopes = "https://www.googleapis.com/auth/drive";
+            this._gAware = document.body.appendChild(e);
+
+            this.listen(this._gAware, "google-signin-aware-success", '_onLogin');
+
+            if (!this._gAware.authorized) {
+                this._gAware.signIn();
+            }
+        },
+
+        _toggleHighlight: function () {
+            this.isHighlighted = !this.isHighlighted;
+        },
+
+        _highlightChanged: function (value) {
+            this.toggleClass('highlighted', value);
+        },
+
+        _onLogin: function () {
+            console.log("Signing here!");
+            debugger;
+        }
+
+    };
+</script>

@@ -1,0 +1,180 @@
+<html>
+<head>
+
+    <script src="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/polymer/polymer.html">
+    <link rel="import"
+          href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/neon-animation/neon-animated-pages.html">
+    <link rel="import"
+          href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/iron-flex-layout/classes/iron-flex-layout.html">
+
+    <link rel="import"
+          href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/neon-animation/neon-shared-element-animatable-behavior.html">
+    <link rel="import"
+          href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/neon-animation/animations/hero-animation.html">
+    <link rel="import"
+          href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/neon-animation/animations/fade-in-animation.html">
+    <link rel="import"
+          href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/neon-animation/animations/fade-out-animation.html">
+
+    <link rel="import" href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/paper-button/paper-button.html">
+
+    <link rel="import" href="https://cdn.rawgit.com/download/polymer-cdn/1.2.3/lib/paper-input/paper-input.html">
+
+    <title>Dynamic Shared Element</title>
+</head>
+
+<body unresolved class="fullbleed vertical layout">
+
+<dom-module id="first-page">
+
+    <template>
+        <paper-button raised on-tap="tapHandler">First Hero</paper-button>
+        <paper-button raised on-tap="tapHandler">Second Hero</paper-button>
+        <paper-input id = "hero_from_1" label="type something"></paper-input>
+    </template>
+
+    <script>
+
+        addEventListener('WebComponentsReady', function () {
+            Polymer({
+                is: 'first-page',
+
+                tapHandler: function (ev) {
+                    //this.sharedElements = {'hero': ev.target};
+                    this.fire('second-page');
+                },
+
+                behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+                properties: {
+                    animationConfig: {
+                        value: function () {
+                            return {
+                                'entry': {
+                                    name: 'fade-in-animation',
+                                    node: this
+                                },
+                                'exit': [
+                                    {
+                                        name: 'hero-animation',
+                                        id: 'hero',
+                                        fromPage: this
+                                    },
+                                    {
+                                        name: 'fade-out-animation',
+                                        node: this
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    sharedElements: {
+                        value: function () {
+                            return {
+                                'hero': this.$.hero_from_1 // changes in ids do not affect hero!!!
+                            }
+                        }
+                    }
+                }
+            })
+        });
+
+    </script>
+
+</dom-module>
+
+<dom-module id="second-page">
+
+    <style>
+        #contents {
+            width: 200px;
+            height: 2000px;
+            background-color: cyan;
+        }
+
+        div {
+            width: 100vw;
+            height: 100vh;
+            background: cornflowerblue;
+        }
+    </style>
+
+    <template>
+        <div id="hero_to" on-tap="firstPage"></div>
+    </template>
+
+    <script>
+
+        addEventListener('WebComponentsReady', function () {
+            Polymer({
+                is: 'second-page',
+                behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+                firstPage: function () {
+                    this.fire('first-page');
+                },
+                properties: {
+                    animationConfig: {
+                        value: function () {
+                            return {
+                                'entry': [
+                                    {
+                                        name: 'hero-animation',
+                                        id: 'hero',
+                                        toPage: this
+                                    },
+                                    {
+                                        name: 'fade-in-animation',
+                                        node: this
+                                    }
+                                ],
+                                'exit': {
+                                    name: 'fade-out-animation',
+                                    node: this
+                                }
+                            }
+                        }
+                    },
+                    sharedElements: {
+                        value: function () {
+                            return {
+                                'hero': this.$.hero_to
+                            }
+                        }
+                    }
+                }
+            })
+        });
+
+    </script>
+
+</dom-module>
+
+<template is="dom-bind" id="app">
+
+    <neon-animated-pages class="flex" selected="[[selected]]">
+
+        <first-page></first-page>
+
+        <second-page></second-page>
+
+    </neon-animated-pages>
+
+</template>
+
+<script>
+    var app = document.getElementById('app');
+    app.selected = 0;
+
+    document.addEventListener('first-page', function () {
+        app.selected = 0;
+    });
+
+    document.addEventListener('second-page', function () {
+        app.selected = 1;
+    });
+
+</script>
+
+</body>
+</html>

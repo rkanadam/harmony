@@ -1,0 +1,136 @@
+<link rel="import" href="imports.html">
+
+<dom-module id="harmony-app">
+
+    <template>
+        <style type="text/css" include="iron-flex iron-flex-alignment">
+            app-toolbar {
+                font-family: 'Roboto', Helvetica, sans-serif;
+                --app-toolbar-font-size: 24px;
+                background-color: #1E88E5;
+                color: white;
+            }
+
+            app-toolbar paper-input {
+                color: white;
+            }
+        </style>
+        <app-header-layout>
+            <app-toolbar>
+                <div main-title>App name</div>
+                <a href="#profile">
+                    <paper-icon-button id="number" icon="account-box" alt="User Name" title="Signed in as [[user.name]] with e-mail [[user.email]]" click="_showProfilePage()"></paper-icon-button>
+                    <paper-badge for="number" label="&#x2713;"></paper-badge>
+                </a>
+            </app-toolbar>
+
+            <iron-location hash="{{page}}" query="[[_computeQuery(page)]]"></iron-location>
+            <!--
+            <app-location route="{{route}}" use-hash-as-path></app-location>
+            <app-route
+                    route="{{route}}"
+                    pattern=":page"
+                    data="{{routeData}}"
+                    tail="{{tail}}">
+            </app-route>
+            -->
+            <neon-animated-pages id="pages" selected="[[page]]" entry-animation="fade-in-animation"
+                                 exit-animation="fade-out-animation"
+                                 attr-for-selected="name">
+                <search-page query="[[query]]" selected="{{selectedBhajan}}"
+                             name="search"></search-page>
+                <bhajan-page bhajan="{{selectedBhajan}}" name="bhajan"></bhajan-page>
+                <profile-page name="profile"></profile-page>
+            </neon-animated-pages>
+        </app-header-layout>
+
+        <paper-dialog id="login"  modal entry-animation="scale-up-animation"
+                      exit-animation="fade-out-animation">
+            <h2>Login</h2>
+            <!--
+            <google-signin client-id="477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com"
+                           scopes="https://www.googleapis.com/auth/drive"
+                           is-authorized="{{authorized}}" is-signed-in="{{signedIn}}"
+                           on-google-signin-success="_onLoginSuccess" with-backdrop always-on-top></google-signin>
+            -->
+        </paper-dialog>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'harmony-app',
+
+            properties: {
+                query: {
+                    type: String,
+                    value: ""
+                },
+
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    value: ""
+                },
+
+                authorized: {
+                    type: Boolean
+                },
+
+                signedIn: {
+                    type: Boolean
+                },
+
+                user: {
+                    type: Object,
+                    value: function () {
+                        return {email: "", "name": ""};
+                    }
+                }
+            },
+
+            behaviors: [SigninBehavior],
+
+            attached: function () {
+                if (!this.page) {
+                    this.set("page", "search");
+                }
+
+                if (this.signedIn !== true) {
+                    //this.$.login.open();
+                }
+            },
+
+            observers: [
+                '_routePageChanged(routeData.page)'
+            ],
+
+            _routePageChanged: function (page) {
+                this.set("page", page);
+            },
+
+            _onLoginSuccess: function () {
+                this.$.login.close();
+                var user = gapi.auth2.getAuthInstance()['currentUser'].get();
+                var profile = user.getBasicProfile();
+                this.set("user.name", profile.getName());
+                this.set("user.email", profile.getEmail());
+            },
+
+
+            toggleDrawer: function (e) {
+                this.$.drawer.toggle();
+            },
+
+            _computeHash: function (page) {
+                return page;
+            },
+
+            _computeQuery: function (page) {
+                return "hello=world";
+            }
+        });
+    </script>
+
+</dom-module>

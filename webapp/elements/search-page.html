@@ -1,0 +1,156 @@
+<dom-module id="search-page">
+
+    <template>
+        <style>
+
+            iron-list {
+            @apply(--layout-flex);
+                height: 100vh; /* don't use % values unless the parent element is sized. */
+            }
+
+            paper-item {
+                white-space: nowrap;
+                cursor: pointer;
+                position: relative;
+            }
+
+            paper-item:hover::after {
+                content: "－";
+                width: 16px;
+                height: 16px;
+                display: block;
+                border-radius: 50% 50%;
+                background-color: var(--google-red-300);
+                margin-left: 10px;
+                line-height: 16px;
+                text-align: center;
+                color: white;
+                font-weight: bold;
+                text-decoration: none;
+                position: absolute;
+                right: 15px;
+                top: calc(50% - 8px);
+            }
+
+            .pad {
+            @apply(--layout-flex);
+            @apply(--layout-vertical);
+                padding: 0 16px;
+            }
+
+            #itemsList,
+            #selectedItemsList {
+            @apply(--layout-flex);
+            }
+
+            .item {
+            @apply(--layout-horizontal);
+                cursor: pointer;
+                padding: 16px 22px;
+                border-bottom: 1px solid #DDD;
+            }
+
+            .item:focus,
+            .item.selected:focus {
+                outline: 0;
+                background-color: #ddd;
+            }
+
+            .item.selected .star {
+                color: var(--paper-blue-600);
+            }
+
+
+        </style>
+        <paper-input
+                id="search"
+                allow-custom-value
+                label="Element"
+                on-keypress="search"
+                >
+            <paper-icon-button icon="search" prefix></paper-icon-button>
+            <paper-icon-button icon="cancel" suffix></paper-icon-button>
+        </paper-input>
+        <iron-ajax id = "ajax"
+                   url="[[_computeUrl(query)]]"
+                   params="[[_computeQueryParams(query)]]"
+                   handle-as="json"
+                   last-response="{{response}}"></iron-ajax>
+
+        <iron-list items="{{response}}" as="item" max-physical-count="10">
+            <div role="listbox">
+                <template>
+                    <div aria-label$="Select/Deselect [[item.name]]" class$="[[_computedClass(selected)]]">
+                        <paper-icon-item>
+                            <iron-icon icon="star" item-icon></iron-icon>
+                            <paper-item-body two-line>
+                                <div>[[_firstLine(item.0)]]</div>
+                                <div secondary>[[_firstLine(item.1)]]</div>
+                            </paper-item-body>
+                        </paper-icon-item>
+                        <div class="border"></div>
+                    </div>
+                </template>
+            </div>
+        </iron-list>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'search-page',
+
+            properties: {
+                query: {
+                    type: String,
+                    value: ""
+                },
+                results: {
+                    type: Array,
+                    value: function () {
+                        return ['Item One', 'Item Two', 'Item Three', 'Item Four', 'Item Five'];
+                    }
+                },
+
+                selectedBhajan: {
+                    type: String,
+                    value: ""
+                }
+            },
+
+            _computeUrl: function (query) {
+                return "http://region7saicenters.org/csj/signups/server/center_devotional_lead_signup.php";
+            },
+
+            _computeQueryParams: function (query) {
+                return {"q": query, "action": ""};
+            },
+
+            _firstLine: function (bhajan) {
+                return bhajan ? bhajan.split("\n")[0].trim() : "";
+            },
+
+            iconForItem: function (isSelected) {
+                return isSelected ? 'star' : 'star-border';
+            },
+
+            _computedClass: function (isSelected) {
+                var classes = 'item';
+                if (isSelected) {
+                    classes += ' selected';
+                }
+                return classes;
+            },
+
+            search: function (e) {
+                this.set("query", this.$.search.inputElement.value + e.key)
+                this.set("page", "search-results");
+            },
+
+            _unselect: function (e) {
+                this.$.itemsList.deselectItem(e.model.item);
+            }
+        });
+    </script>
+
+</dom-module>

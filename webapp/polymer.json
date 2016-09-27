@@ -1,0 +1,18 @@
+{
+    "entrypoint": "index.html",
+    "shell": "elements/harmony-app.html",
+    "fragments": [
+        "elements/bhajan-page.html",
+        "elements/imports.html",
+        "elements/search-results.html"
+    ],
+    "sourceGlobs": [
+        "elements/**/*",
+        "images/**/*",
+        "bower.json"
+    ],
+    "includeDependencies": [
+        "manifest.json",
+        "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+    ]
+}
