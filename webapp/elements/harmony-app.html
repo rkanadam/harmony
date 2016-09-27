@@ -19,7 +19,9 @@
             <app-toolbar>
                 <div main-title>App name</div>
                 <a href="#profile">
-                    <paper-icon-button id="number" icon="account-box" alt="User Name" title="Signed in as [[user.name]] with e-mail [[user.email]]" click="_showProfilePage()"></paper-icon-button>
+                    <paper-icon-button id="number" icon="account-box" alt="User Name"
+                                       title="Signed in as [[user.name]] with e-mail [[user.email]]"
+                                       click="_showProfilePage()"></paper-icon-button>
                     <paper-badge for="number" label="&#x2713;"></paper-badge>
                 </a>
             </app-toolbar>
@@ -44,7 +46,7 @@
             </neon-animated-pages>
         </app-header-layout>
 
-        <paper-dialog id="login"  modal entry-animation="scale-up-animation"
+        <paper-dialog id="login" modal entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
             <h2>Login</h2>
             <!--
@@ -98,7 +100,8 @@
                 }
 
                 if (this.signedIn !== true) {
-                    //this.$.login.open();
+                    this.googleClientId = "477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com";
+                    this.googleAuthScopes = "profile email";
                 }
             },
 

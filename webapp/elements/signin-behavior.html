@@ -2,16 +2,20 @@
     SigninBehavior = {
 
         properties: {
-            isHighlighted: {
-                type: Boolean,
-                value: false,
-                notify: true,
-                observer: '_highlightChanged'
-            }
-        },
+            googleClientId: {
+                type: String,
+                observer: '_logoutAndLogin'
+            },
 
-        listeners: {
-            click: '_toggleHighlight'
+            googleAuthScopes: {
+                type: String,
+                observer: '_logoutAndLogin'
+            },
+
+            isAuthorized: {
+                type: Boolean,
+                value: false
+            }
         },
 
         created: function () {
@@ -23,22 +27,19 @@
 
              */
             this._apiLoader = document.createElement('google-js-api');
-            this._apiLoader.addEventListener('js-api-load', function () {
-                window.gapi.load('auth2', this._onApiLoad.bind(this));
-            }.bind(this));
+            this.listen(this._apiLoader, 'js-api-load', '_onGAPILoad');
+        },
+
+        _onGAPILoad: function () {
+            window.gapi.load('auth2', this._onApiLoad.bind(this));
         },
 
         _onApiLoad: function () {
             var e = document.createElement("google-signin-aware");
-            e.clientId = "477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com";
-            e.scopes = "https://www.googleapis.com/auth/drive";
             this._gAware = document.body.appendChild(e);
 
             this.listen(this._gAware, "google-signin-aware-success", '_onLogin');
-
-            if (!this._gAware.authorized) {
-                this._gAware.signIn();
-            }
+            this._logoutAndLogin();
         },
 
         _toggleHighlight: function () {
@@ -50,9 +51,31 @@
         },
 
         _onLogin: function () {
-            console.log("Signing here!");
-            debugger;
-        }
+            this.set("isAuthorized", true);
+        },
 
+        _logoutAndLogin: function () {
+            if (this._gAware) {
+                var logout = false;
+                if (this.googleClientId && this._gAware.clientId !== this.googleClientId) {
+                    this._gAware.clientId = this.googleClientId;
+                    logout = true;
+                }
+
+                if (this.googleAuthScopes && this._gAware.scopes !== this.googleAuthScopes) {
+                    this._gAware.scopes = this.googleAuthScopes;
+                    logout = true;
+                }
+
+                if (this.googleAuthScopes && this.googleClientId) {
+                    if (logout) {
+                        this._gAware.signOut();
+                    }
+                    if (!this._gAware.isAuthorized) {
+                        this._gAware.signIn();
+                    }
+                }
+            }
+        }
     };
 </script>
