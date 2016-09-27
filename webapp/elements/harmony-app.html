@@ -18,12 +18,18 @@
         <app-header-layout>
             <app-toolbar>
                 <div main-title>App name</div>
-                <a href="#profile">
-                    <paper-icon-button id="number" icon="account-box" alt="User Name"
-                                       title="Signed in as [[user.name]] with e-mail [[user.email]]"
-                                       click="_showProfilePage()"></paper-icon-button>
-                    <paper-badge for="number" label="&#x2713;"></paper-badge>
-                </a>
+                <template is="dom-if" if="{{isSignedIn}}">
+                    <a href="#profile">
+                        <paper-icon-button id="number" icon="account-box" alt="User Name"
+                                           title="Signed in as [[authorizedUser.name]] with e-mail [[authorizedUser.email]]"
+                                           click="_showProfilePage()">Edit Profile</paper-icon-button>
+                    </a>
+                </template>
+                <google-signin client-id="477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com"
+                               scopes="email profile"
+                               on-google-signed-out="_onLogout"
+                               on-google-signin-success="_onLogin" with-backdrop
+                               always-on-top></google-signin>
             </app-toolbar>
 
             <iron-location hash="{{page}}" query="[[_computeQuery(page)]]"></iron-location>
@@ -49,12 +55,6 @@
         <paper-dialog id="login" modal entry-animation="scale-up-animation"
                       exit-animation="fade-out-animation">
             <h2>Login</h2>
-            <!--
-            <google-signin client-id="477636750840-9kmsln38ji1ramlf56uk12ktud92gas6.apps.googleusercontent.com"
-                           scopes="https://www.googleapis.com/auth/drive"
-                           is-authorized="{{authorized}}" is-signed-in="{{signedIn}}"
-                           on-google-signin-success="_onLoginSuccess" with-backdrop always-on-top></google-signin>
-            -->
         </paper-dialog>
 
     </template>
@@ -72,12 +72,22 @@
 
                 page: {
                     type: String,
-                    reflectToAttribute: true,
                     value: ""
                 },
-            },
 
-            behaviors: [SigninBehavior],
+                isSignedIn: {
+                    type: Boolean,
+                    value: false
+                },
+
+
+                authorizedUser: {
+                    type: Object,
+                    value: function () {
+                        return {email: "", "name": ""};
+                    }
+                }
+            },
 
             attached: function () {
                 if (!this.page) {
@@ -92,17 +102,23 @@
 
             observers: [
                 '_routePageChanged(routeData.page)',
-                '_onSigninChanged(isSignedIn)'
             ],
 
             _routePageChanged: function (page) {
                 this.set("page", page);
             },
 
-            _onSigninChanged: function (isSignedIn) {
-                if (isSignedIn === true) {
-                    console.log (this.authorizedUser);
-                }
+            _onLogout: function () {
+                this.set ("authorizedUser", {name: "", email: ""});
+                this.set("isSignedIn", false);
+            },
+
+            _onLogin: function () {
+                var user = gapi.auth2.getAuthInstance()['currentUser'].get();
+                var profile = user.getBasicProfile();
+                this.set("authorizedUser.name", profile.getName());
+                this.set("authorizedUser.email", profile.getEmail());
+                this.set("isSignedIn", true);
             },
 
 

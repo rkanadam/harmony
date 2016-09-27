@@ -46,9 +46,9 @@
         _onApiLoad: function () {
             var e = document.createElement("google-signin-aware");
             this._gAware = document.body.appendChild(e);
-
             this.listen(this._gAware, "google-signin-aware-success", '_onLogin');
-            this._logoutAndLogin();
+
+            //this._logoutAndLogin();
         },
 
         _onLogin: function (e, user) {
@@ -81,6 +81,11 @@
                     }
                 }
             }
+        },
+
+        login: function () {
+            this._logoutAndLogin();
         }
+
     };
 </script>

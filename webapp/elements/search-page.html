@@ -4,7 +4,7 @@
         <style>
 
             iron-list {
-            @apply(--layout-flex);
+            @apply(- -layout-flex);
                 height: 100vh; /* don't use % values unless the parent element is sized. */
             }
 
@@ -33,18 +33,18 @@
             }
 
             .pad {
-            @apply(--layout-flex);
-            @apply(--layout-vertical);
+            @apply(- -layout-flex);
+            @apply(- -layout-vertical);
                 padding: 0 16px;
             }
 
             #itemsList,
             #selectedItemsList {
-            @apply(--layout-flex);
+            @apply(- -layout-flex);
             }
 
             .item {
-            @apply(--layout-horizontal);
+            @apply(- -layout-horizontal);
                 cursor: pointer;
                 padding: 16px 22px;
                 border-bottom: 1px solid #DDD;
@@ -71,7 +71,16 @@
             <paper-icon-button icon="search" prefix></paper-icon-button>
             <paper-icon-button icon="cancel" suffix></paper-icon-button>
         </paper-input>
-        <iron-ajax id = "ajax"
+
+        <paper-input value="{{user.user}}"></paper-input>
+
+
+        <template is="dom-repeat" items="{{users}}" as="item">
+            <paper-input value="{{item.user}}"></paper-input>
+        </template>
+
+
+        <iron-ajax id="ajax"
                    url="[[_computeUrl(query)]]"
                    params="[[_computeQueryParams(query)]]"
                    handle-as="json"
@@ -80,7 +89,7 @@
         <iron-list items="{{response}}" as="item" max-physical-count="10">
             <div role="listbox">
                 <template>
-                    <div aria-label$="Select/Deselect [[item.name]]" class$="[[_computedClass(selected)]]">
+                    <div aria-label>
                         <paper-icon-item>
                             <iron-icon icon="star" item-icon></iron-icon>
                             <paper-item-body two-line>
@@ -115,6 +124,24 @@
                 selectedBhajan: {
                     type: String,
                     value: ""
+                },
+
+                users: {
+                    type: Array,
+                    value: function () {
+                        return [
+                            {"user": "Raghu"},
+                            {"user": "Ram"},
+                            {"user": "Kanadam"}
+                        ];
+                    }
+                },
+
+                user: {
+                    type: Object,
+                    value: function () {
+                        return {"user": "hello", "name": "world"};
+                    }
                 }
             },
 
