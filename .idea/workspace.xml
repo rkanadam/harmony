@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7402d1fb-1bbd-4f3e-a3ef-b29567d2d48f" name="Default" comment="Adding gitignore">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webapp/elements/harmony-app.html" afterPath="$PROJECT_DIR$/webapp/elements/harmony-app.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="7402d1fb-1bbd-4f3e-a3ef-b29567d2d48f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webapp/elements/signin-behavior.html" afterPath="$PROJECT_DIR$/webapp/elements/signin-behavior.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -31,8 +29,8 @@
       <file leaf-file-name="signin-behavior.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webapp/elements/signin-behavior.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.20518602" vertical-offset="73" max-vertical-offset="1305">
-              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.475761" vertical-offset="418" max-vertical-offset="1305">
+              <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -512,7 +510,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="Adding gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding gitignore" />
+    <MESSAGE value="Adding fixing app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding fixing app" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -894,8 +893,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/elements/signin-behavior.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20518602" vertical-offset="73" max-vertical-offset="1305">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.475761" vertical-offset="418" max-vertical-offset="1305">
+          <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
           <folding />
         </state>
       </provider>

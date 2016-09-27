@@ -68,7 +68,7 @@
                 }
 
                 if (this.googleAuthScopes && this.googleClientId) {
-                    if (logout) {
+                    if (logout && this._gAware.isAuthorized) {
                         this._gAware.signOut();
                     }
                     if (!this._gAware.isAuthorized) {
