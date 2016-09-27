@@ -12,9 +12,18 @@
                 observer: '_logoutAndLogin'
             },
 
-            isAuthorized: {
+            isSignedIn: {
                 type: Boolean,
-                value: false
+                value: false,
+                notify: true
+            },
+
+            authorizedUser: {
+                type: Object,
+                value: function () {
+                    return {email: "", "name": ""};
+                },
+                notify: true
             }
         },
 
@@ -42,16 +51,12 @@
             this._logoutAndLogin();
         },
 
-        _toggleHighlight: function () {
-            this.isHighlighted = !this.isHighlighted;
-        },
-
-        _highlightChanged: function (value) {
-            this.toggleClass('highlighted', value);
-        },
-
-        _onLogin: function () {
-            this.set("isAuthorized", true);
+        _onLogin: function (e, user) {
+            var user = gapi.auth2.getAuthInstance()['currentUser'].get();
+            var profile = user.getBasicProfile();
+            this.set("authorizedUser.name", profile.getName());
+            this.set("authorizedUser.email", profile.getEmail());
+            this.set("isSignedIn", true);
         },
 
         _logoutAndLogin: function () {

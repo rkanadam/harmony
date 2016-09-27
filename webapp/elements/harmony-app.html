@@ -75,21 +75,6 @@
                     reflectToAttribute: true,
                     value: ""
                 },
-
-                authorized: {
-                    type: Boolean
-                },
-
-                signedIn: {
-                    type: Boolean
-                },
-
-                user: {
-                    type: Object,
-                    value: function () {
-                        return {email: "", "name": ""};
-                    }
-                }
             },
 
             behaviors: [SigninBehavior],
@@ -106,19 +91,18 @@
             },
 
             observers: [
-                '_routePageChanged(routeData.page)'
+                '_routePageChanged(routeData.page)',
+                '_onSigninChanged(isSignedIn)'
             ],
 
             _routePageChanged: function (page) {
                 this.set("page", page);
             },
 
-            _onLoginSuccess: function () {
-                this.$.login.close();
-                var user = gapi.auth2.getAuthInstance()['currentUser'].get();
-                var profile = user.getBasicProfile();
-                this.set("user.name", profile.getName());
-                this.set("user.email", profile.getEmail());
+            _onSigninChanged: function (isSignedIn) {
+                if (isSignedIn === true) {
+                    console.log (this.authorizedUser);
+                }
             },
 
 
