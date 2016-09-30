@@ -4,7 +4,8 @@
         <style>
 
             iron-list {
-            @apply(- -layout-flex);
+                @apply(
+                --layout-flex);
                 height: 100vh; /* don't use % values unless the parent element is sized. */
             }
 
@@ -33,18 +34,22 @@
             }
 
             .pad {
-            @apply(- -layout-flex);
-            @apply(- -layout-vertical);
+                @apply(
+                --layout-flex);
+                @apply(
+                --layout-vertical);
                 padding: 0 16px;
             }
 
             #itemsList,
             #selectedItemsList {
-            @apply(- -layout-flex);
+                @apply(
+                --layout-flex);
             }
 
             .item {
-            @apply(- -layout-horizontal);
+                @apply(
+                --layout-horizontal);
                 cursor: pointer;
                 padding: 16px 22px;
                 border-bottom: 1px solid #DDD;
@@ -62,21 +67,38 @@
 
 
         </style>
+
+        <paper-card heading="Emmental" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
+            <div class="card-content">
+                Emmentaler or Emmental is a yellow, medium-hard cheese that originated in the area around Emmental, Switzerland. It is one of the cheeses of Switzerland, and is sometimes known as Swiss cheese.
+            </div>
+            <div class="card-actions">
+                <paper-button>Share</paper-button>
+                <paper-button>Explore!</paper-button>
+            </div>
+            <spinner-backdrop loading="{{loading}}"></spinner-backdrop>
+        </paper-card>
+
         <paper-input
                 id="search"
                 allow-custom-value
                 label="Element"
                 on-keypress="search"
-                >
+        >
             <paper-icon-button icon="search" prefix></paper-icon-button>
             <paper-icon-button icon="cancel" suffix></paper-icon-button>
         </paper-input>
 
-        <paper-input value="{{user.user}}"></paper-input>
+        <paper-icon-button icon="menu" on-click="_showDialog"></paper-icon-button>
+
+
+        <paper-input value="{{user.name}}"></paper-input>
+        <paper-input value="{{user.email}}"></paper-input>
 
 
         <template is="dom-repeat" items="{{users}}" as="item">
-            <paper-input value="{{item.user}}"></paper-input>
+            <paper-input value="{{item.name}}"></paper-input>
+            <paper-input value="{{item.email}}"></paper-input>
         </template>
 
 
@@ -102,6 +124,7 @@
                 </template>
             </div>
         </iron-list>
+
     </template>
 
     <script>
@@ -126,13 +149,19 @@
                     value: ""
                 },
 
+                loading: {
+                    type: Boolean,
+                    value: false
+                },
+
+
                 users: {
                     type: Array,
                     value: function () {
                         return [
-                            {"user": "Raghu"},
-                            {"user": "Ram"},
-                            {"user": "Kanadam"}
+                            {"name": "Raghu1", "email": "b1"},
+                            {"name": "Raghu2", "email": "b2"},
+                            {"name": "Raghu3", "email": "b3"},
                         ];
                     }
                 },
@@ -140,7 +169,7 @@
                 user: {
                     type: Object,
                     value: function () {
-                        return {"user": "hello", "name": "world"};
+                        return {"name": "hello", "email": "world"};
                     }
                 }
             },
@@ -176,6 +205,11 @@
 
             _unselect: function (e) {
                 this.$.itemsList.deselectItem(e.model.item);
+            },
+
+            _showDialog: function (e) {
+                this.loading  = true;
+
             }
         });
     </script>

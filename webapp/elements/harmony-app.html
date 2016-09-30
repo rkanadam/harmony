@@ -32,8 +32,7 @@
                                always-on-top></google-signin>
             </app-toolbar>
 
-            <iron-location hash="{{page}}" query="[[_computeQuery(page)]]"></iron-location>
-            <!--
+            <iron-location hash="{{url}}" query="[[_computeQuery(page)]]"></iron-location>
             <app-location route="{{route}}" use-hash-as-path></app-location>
             <app-route
                     route="{{route}}"
@@ -41,7 +40,6 @@
                     data="{{routeData}}"
                     tail="{{tail}}">
             </app-route>
-            -->
             <neon-animated-pages id="pages" selected="[[page]]" entry-animation="fade-in-animation"
                                  exit-animation="fade-out-animation"
                                  attr-for-selected="name">
@@ -70,6 +68,11 @@
                     value: ""
                 },
 
+                url: {
+                    type: String,
+                    value: ""
+                },
+
                 page: {
                     type: String,
                     value: ""
@@ -91,7 +94,7 @@
 
             attached: function () {
                 if (!this.page) {
-                    this.set("page", "search");
+                    this.set("url", "search");
                 }
 
                 if (this.signedIn !== true) {
