@@ -24,9 +24,16 @@
             "produces":[
                "application/json"
             ],
-            "requestBody":{
-               "$ref":"#/definitions/sayhellorequest"
-            },
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/sayhellorequest"
+                  }
+               }
+            ],
             "responses":{
                "200":{
                   "schema":{
