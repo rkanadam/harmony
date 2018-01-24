@@ -15,7 +15,7 @@
    },
    "paths":{
       "hello":{
-         "get":{
+         "post":{
             "path":"hello",
             "requestMethod":"get",
             "consumes":[
