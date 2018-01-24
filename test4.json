@@ -17,14 +17,14 @@
       "hello":{
          "post":{
             "path":"hello",
-            "requestMethod":"get",
+            "requestMethod":"post",
             "consumes":[
                "application/json"
             ],
             "produces":[
                "application/json"
             ],
-            "parameters":[
+            "requestBody":[
                {
                   "in":"body",
                   "name":"body",
